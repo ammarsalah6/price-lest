@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قائمة أسعار نزيه العطار</title>
+    <title>Nazih El_Attar Price List</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <style>
@@ -17,49 +17,61 @@
             color: #333;
         }
 
-        /* الهيدر (رأس الصفحة) */
+        
         header {
-            background-color: #24700d; /* لون بني مميز */
+            background-color: #24700d; 
             color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
+            padding: 15px 20px; 
+            display: grid;
+            grid-template-columns: 1fr auto 1fr; 
             align-items: center;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: sticky; 
+            top: 0;
+            z-index: 1000;
         }
+        
         .logo-container {
+            grid-column: 2 / 3; 
             display: flex;
-            align-items: center;
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center;
         }
         .logo-container img {
-            height: 50px; /* حجم اللوجو */
-            margin-left: 15px;
+            height: 80px; 
+            margin-bottom: 5px; 
             border-radius: 50%;
-            border: 2px solid white;
+            border: 2px solid #edce20;
+            margin-left: 0; 
         }
         header h1 {
-            margin: 0;
-            font-size: 1.8em;
+            margin: 0; 
+            font-size: 1.6em; 
         }
 
-        /* حاوية الأزرار في الهيدر */
         .header-buttons {
+            grid-column: 1 / 2; 
             display: flex;
             gap: 10px;
+            justify-self: start; 
         }
+        
+        /* تنسيقات الأزرار */
         .header-buttons a, .header-buttons button {
             text-decoration: none;
             color: white;
-            background-color: #0a3a04; /* لون أفتح للأزرار */
+            background-color: #0a3a04; 
             border: none;
-            padding: 8px 12px;
+            padding: 10px 20px;
             border-radius: 10px;
-            font-size: 0.9em;
+            font-size: 1em; 
             cursor: pointer;
             transition: background-color 0.3s;
         }
         .header-buttons a:hover, .header-buttons button:hover {
-            background-color: #ddf5c7;
+            background-color: #6eac33;
             color: #0b0b0b;
         }
 
@@ -117,10 +129,10 @@
             cursor: pointer;
             font-weight: bold;
             transition: background-color 0.3s;
-            font-size: 25px;
+            font-size: 20px; /* تم تعديل حجم الخط */
         }
         .toggle-btn:hover {
-            background-color: #A52A2A;
+            background-color: #126104;
             color: white;
         }
 
@@ -133,18 +145,17 @@
 <body>
 
     <header>
-        <div class="logo-container">
-            <img src="logo.png" alt="شعار المتجر">
-            <h1>نزيه العطار</h1>
-        </div>
-        
         <div class="header-buttons">
-            <a href="URL_لصفحة_من_نحن" target="_blank">اعرف عنا</a>
-
             <a href="tel:+201227201188"><i class="fas fa-phone"></i> اتصال</a>
-
             <a href="https://wa.me/+201227201188" target="_blank"><i class="fab fa-whatsapp"></i> واتساب</a>
         </div>
+        
+        <div class="logo-container">
+            <img src="logo.png" alt="شعار المتجر">
+            <h1>نـــزيـه الـعـطــار</h1>
+        </div>
+        
+        <div></div>
     </header>
 
     <div class="main-content">
