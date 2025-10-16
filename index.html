@@ -166,9 +166,9 @@
             color: white;
         }
 
-        /* 💡 كلاس الإخفاء الموحد (يستخدمه "عرض المزيد") */
+        /* 💡 كلاس الإخفاء الموحد (بدون !important) */
         .hidden-item {
-            display: none !important;
+            display: none;
         }
     </style>
 </head>
@@ -214,39 +214,33 @@
         const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRgbYRoL8GGwdIFjwzWvtNh43_ylOoYDRCst4i-pJUjPOwT813rVkCCGeoYFKfSPnXcHBAb094Z1SF8/pub?gid=1174703353&single=true&output=csv';
         const ITEMS_TO_SHOW = 5; 
 
-        // 💡 الدالة المصححة لـ "عرض المزيد/عرض الأقل"
         function toggleItems(button, categoryId) {
             const container = document.getElementById(categoryId);
             const allItems = container.querySelectorAll('.menu-item');
             const totalHiddenCount = allItems.length - ITEMS_TO_SHOW;
 
-            // إذا كان النص الحالي هو "عرض المزيد"
             if (button.innerText.includes('عرض المزيد')) {
                 allItems.forEach((item, index) => {
-                    // إظهار جميع العناصر التي كانت مخفية (بعد أول 5)
                     if (index >= ITEMS_TO_SHOW) {
-                        item.classList.remove('hidden-item'); // إزالة كلاس الإخفاء
-                        item.style.display = 'flex'; // 💡 التعديل الحاسم: التأكد من ظهورها
+                        item.classList.remove('hidden-item');
+                        item.style.display = 'flex';
                     }
                 });
                 button.innerText = 'عرض الأقل';
             } else {
-                // إخفاء العناصر الزائدة عن طريق إضافة الكلاس
                 allItems.forEach((item, index) => {
                     if (index >= ITEMS_TO_SHOW) {
                          item.classList.add('hidden-item');
-                         item.style.display = 'none'; // 💡 إضافة هذا للتأكد من الإخفاء
+                         item.style.display = 'none';
                     }
                 });
                 button.innerText = `عرض المزيد (${totalHiddenCount} صنف إضافي)`;
             }
             
-            // إعادة ضبط شريط البحث (مهم عند التبديل بين العرض الكامل والمختصر)
             document.getElementById('searchInput').value = ''; 
             filterMenu(); 
         }
 
-        // 💡 دالة البحث/الفلترة (تم تعديلها لتتناسق مع toggleItems)
         function filterMenu() {
             const input = document.getElementById('searchInput');
             const filter = input.value.toLowerCase(); 
@@ -260,43 +254,36 @@
                 
                 let categoryHasMatch = false;
                 
-                // 1. البحث في الأصناف
                 items.forEach(item => {
                     const itemName = item.querySelector('.item-name').innerText.toLowerCase();
                     const itemCategory = categoryTitle.innerText.toLowerCase();
 
-                    // شرط المطابقة: إما اسم الصنف يطابق أو التصنيف يطابق
                     if (itemName.includes(filter) || itemCategory.includes(filter)) {
-                        item.style.display = 'flex'; // إظهار الصنف
+                        item.style.display = 'flex';
                         categoryHasMatch = true;
-                        // إزالة كلاس الإخفاء الخاص بـ 'عرض المزيد' لضمان الظهور أثناء البحث
                         item.classList.remove('hidden-item'); 
                     } else {
-                        item.style.display = 'none'; // إخفاء الصنف
+                        item.style.display = 'none';
                     }
                 });
                 
-                // 2. التعامل مع زر عرض المزيد/عرض الأقل (إخفائه أثناء البحث)
                 if (toggleBtn) {
                     toggleBtn.style.display = 'none';
                 }
 
-                // 3. التعامل مع حاوية التصنيف بالكامل
                 if (categoryHasMatch) {
                     categoryContainer.style.display = 'block'; 
                 } else {
                     categoryContainer.style.display = 'none'; 
                 }
 
-                // 4. إذا كان مربع البحث فارغًا، نرجع القائمة لوضعها الطبيعي
                 if (filter === '') {
                     categoryContainer.style.display = 'block'; 
                     if (toggleBtn) toggleBtn.style.display = 'block'; 
                     
                     items.forEach((item, index) => {
-                        item.style.display = 'flex'; // إظهار الكل أولاً (إلغاء الإخفاء الناتج عن البحث)
+                        item.style.display = 'flex';
                         
-                        // ثم إعادة إضافة كلاس الإخفاء للعناصر الزائدة
                         if (index >= ITEMS_TO_SHOW) {
                              item.classList.add('hidden-item');
                         } else {
@@ -304,7 +291,6 @@
                         }
                     });
 
-                    // إعادة زر "عرض الأقل" لوضعه الأصلي (عرض المزيد)
                     if (toggleBtn && toggleBtn.innerText.includes('عرض الأقل')) {
                          const hiddenCount = items.length - ITEMS_TO_SHOW;
                          toggleBtn.innerText = `عرض المزيد (${hiddenCount} صنف إضافي)`;
@@ -341,16 +327,15 @@
                 
                 for (const category in categories) {
                     const items = categories[category];
-                    const categoryId = 'cat-' + category.replace(/\s/g, '_'); 
+                    // 🔹 تعديل الـ ID ليكون آمن
+                    const categoryId = 'cat-' + category.replace(/[^a-zA-Z0-9_\u0600-\u06FF]/g, '_'); 
 
                     menuHTML += `<div class="category-container">`;
                     menuHTML += `<h2>${category}</h2>`;
                     menuHTML += `<div id="${categoryId}">`;
                     
                     items.forEach((dish, index) => {
-                        const isHidden = index >= ITEMS_TO_SHOW;
-                        // نستخدم كلاس 'hidden-item' للإخفاء الأولي
-                        const hiddenClass = isHidden ? 'hidden-item' : '';
+                        const hiddenClass = index >= ITEMS_TO_SHOW ? 'hidden-item' : '';
                         
                         menuHTML += `
                             <div class="menu-item ${hiddenClass}">
@@ -374,11 +359,7 @@
                     menuHTML += `</div>`; 
                 }
 
-                if (menuHTML === '') {
-                    container.innerHTML = '<p style="color:blue; text-align:center;">القائمة فارغة أو صيغة الأعمدة غير صحيحة.</p>';
-                } else {
-                    container.innerHTML = menuHTML;
-                }
+                container.innerHTML = menuHTML || '<p style="color:blue; text-align:center;">القائمة فارغة أو صيغة الأعمدة غير صحيحة.</p>';
                 
             } catch (error) {
                 console.error('حدث خطأ أثناء جلب أو تحليل البيانات:', error);
