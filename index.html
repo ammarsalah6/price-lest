@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nazih El_Attar Price List</title>
+    <title>قائمة أسعار نزيه العطار</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <style>
@@ -17,7 +17,7 @@
             color: #333;
         }
 
-        
+        /* الهيدر (رأس الصفحة) */
         header {
             background-color: #24700d; 
             color: white;
@@ -31,6 +31,7 @@
             z-index: 1000;
         }
         
+        /* توسيط اللوجو داخل العمود الأوسط */
         .logo-container {
             grid-column: 2 / 3; 
             display: flex;
@@ -40,18 +41,18 @@
             text-align: center;
         }
         .logo-container img {
-            height: 120px; 
+            height: 70px; 
             margin-bottom: 5px; 
             border-radius: 50%;
-            border: 2px solid #edce20;
+            border: 3px solid #ddf5c7;
             margin-left: 0; 
         }
         header h1 {
             margin: 0; 
-            font-size: 35px;
-            color: blanchedalmond;
+            font-size: 1.6em;
         }
 
+        /* حاوية الأزرار في الهيدر */
         .header-buttons {
             grid-column: 1 / 2; 
             display: flex;
@@ -65,16 +66,44 @@
             color: white;
             background-color: #0a3a04; 
             border: none;
-            padding: 20px 35px;
-            border-radius: 10px 0px 10px 0px;
-            font-size: 30px;
-            font-weight: bold; 
+            padding: 10px 20px; 
+            border-radius: 10px;
+            font-size: 1em; 
             cursor: pointer;
             transition: background-color 0.3s;
         }
         .header-buttons a:hover, .header-buttons button:hover {
-            background-color: #478d05;
+            background-color: #ddf5c7;
             color: #0b0b0b;
+        }
+
+        /* 💡 تنسيق مربع البحث الجديد */
+        .search-container {
+            max-width: 850px;
+            margin: 20px auto;
+            padding: 15px;
+            background-color: #ffffff84;
+            border-radius: 15px 0px 15px 0px ;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            
+        }
+        #searchInput {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #24700d;
+            border-radius: 12px;
+            font-size: 1.1em;
+            text-align: right;
+            outline: none;
+            box-sizing: border-box; /* للتأكد أن الـ padding لا يزيد العرض الكلي */
+            margin-left: 20px; /* مسافة عن الأيقونة */
+        }
+        .search-icon {
+            color: #24700d;
+            font-size: 1.5em;
+        margin-left: 15px;
         }
 
         /* تنسيق أقسام المنيو */
@@ -86,7 +115,7 @@
             margin: 0 auto 30px auto;
             background-color: #ffffff;
             padding: 25px;
-            border-radius: 12px;
+            border-radius: 15px 0px 15px 0px;
             box-shadow: 0 6px 15px rgba(0,0,0,0.1);
         }
         h2 {
@@ -103,6 +132,7 @@
             padding: 12px 0;
             border-bottom: 1px dotted #e0e0e0;
         }
+        /* ... (باقي تنسيقات الأصناف) ... */
         .menu-item:last-of-type {
             border-bottom: none;
         }
@@ -121,6 +151,7 @@
         
         /* زر عرض المزيد */
         .toggle-btn {
+            /* ... (تنسيقات زر عرض المزيد) ... */
             width: 100%;
             padding: 10px;
             margin-top: 15px;
@@ -131,7 +162,7 @@
             cursor: pointer;
             font-weight: bold;
             transition: background-color 0.3s;
-            font-size: 20px; /* تم تعديل حجم الخط */
+            font-size: 20px;
         }
         .toggle-btn:hover {
             background-color: #126104;
@@ -142,25 +173,35 @@
         .hidden-item {
             display: none;
         }
+        /* كلاس لإظهار العناصر عند البحث (يتجاوز hidden-item) */
+        .search-match {
+            display: flex !important;
+        }
     </style>
 </head>
 <body>
 
     <header>
         <div class="header-buttons">
+            <a href="URL_لصفحة_من_نحن" target="_blank">اعرف عنا</a>
             <a href="tel:+201227201188"><i class="fas fa-phone"></i> اتصال</a>
             <a href="https://wa.me/+201227201188" target="_blank"><i class="fab fa-whatsapp"></i> واتساب</a>
         </div>
         
         <div class="logo-container">
             <img src="logo.png" alt="شعار المتجر">
-            <h1>نـــزيـه الـعـطــار</h1>
+            <h1>نزيه العطار</h1>
         </div>
         
         <div></div>
     </header>
 
     <div class="main-content">
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" placeholder="ابحث باسم الصنف أو التصنيف..." onkeyup="filterMenu()">
+        </div>
+
         <div id="menu-container">
             <p style="text-align:center;">جاري تحميل الأسعار...</p>
         </div>
@@ -178,10 +219,68 @@
     </div>
     
     <script>
-        // رابط الـ CSV الذي أرسلته (سليم)
         const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRgbYRoL8GGwdIFjwzWvtNh43_ylOoYDRCst4i-pJUjPOwT813rVkCCGeoYFKfSPnXcHBAb094Z1SF8/pub?gid=1174703353&single=true&output=csv';
-        const ITEMS_TO_SHOW = 5; // عدد الأصناف المبدئي للعرض قبل "عرض المزيد"
+        const ITEMS_TO_SHOW = 5; 
+        
+        // 💡 دالة البحث/الفلترة الجديدة
+        function filterMenu() {
+            const input = document.getElementById('searchInput');
+            // تحويل قيمة البحث إلى حروف صغيرة (لضمان الفلترة بدون حساسية لحالة الأحرف)
+            const filter = input.value.toLowerCase(); 
+            const categories = document.querySelectorAll('.category-container');
 
+            categories.forEach(categoryContainer => {
+                const categoryTitle = categoryContainer.querySelector('h2');
+                const itemsDiv = categoryContainer.querySelector('[id^="cat-"]');
+                const items = itemsDiv ? itemsDiv.querySelectorAll('.menu-item') : [];
+                const toggleBtn = categoryContainer.querySelector('.toggle-btn');
+                
+                let categoryMatchCount = 0;
+                
+                // البحث في الأصناف
+                items.forEach(item => {
+                    const itemName = item.querySelector('.item-name').innerText.toLowerCase();
+                    const itemCategory = categoryTitle.innerText.toLowerCase();
+
+                    // شرط المطابقة: إما اسم الصنف يطابق، أو التصنيف يطابق
+                    if (itemName.includes(filter) || itemCategory.includes(filter)) {
+                        item.style.display = 'flex';
+                        categoryMatchCount++;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+                
+                // التعامل مع زر عرض المزيد/عرض الأقل
+                if (toggleBtn) {
+                    toggleBtn.style.display = 'none';
+                }
+
+                // التعامل مع حاوية التصنيف بالكامل
+                if (categoryMatchCount > 0 || categoryTitle.innerText.toLowerCase().includes(filter)) {
+                    categoryContainer.style.display = 'block'; // إظهار التصنيف لو فيه نتائج
+                } else {
+                    categoryContainer.style.display = 'none'; // إخفاء التصنيف بالكامل لو مافيش نتائج
+                }
+
+                // إذا كان مربع البحث فارغًا، نرجع القائمة لوضعها الطبيعي (5 أصناف وزر عرض المزيد)
+                if (filter === '') {
+                    categoryContainer.style.display = 'block'; // إظهار الكل
+                    if (toggleBtn) toggleBtn.style.display = 'block'; // إظهار زر التبديل لو موجود
+                    
+                    items.forEach((item, index) => {
+                        // إخفاء الأصناف اللي المفروض تكون مخفية أصلاً (أكثر من 5)
+                        if (index >= ITEMS_TO_SHOW) {
+                            item.style.display = 'none';
+                        } else {
+                            item.style.display = 'flex';
+                        }
+                    });
+                }
+            });
+        }
+        
+        // ... (دالة عرض المزيد/عرض الأقل) ...
         function toggleItems(button, categoryId) {
             const container = document.getElementById(categoryId);
             const hiddenItems = container.querySelectorAll('.hidden-item');
@@ -193,6 +292,9 @@
                 hiddenItems.forEach(item => item.style.display = 'none');
                 button.innerText = `عرض المزيد (${hiddenItems.length} صنف إضافي)`;
             }
+            // عند البحث، يتم تجاهل هذا الزر، لذا عند الضغط عليه، نضمن إظهار العنصر
+            document.getElementById('searchInput').value = ''; 
+            filterMenu(); // إعادة فحص الفلترة
         }
 
         async function loadMenu() {
@@ -223,7 +325,6 @@
                 
                 for (const category in categories) {
                     const items = categories[category];
-                    // إنشاء معرّف فريد لكل قسم
                     const categoryId = 'cat-' + category.replace(/\s/g, '_'); 
 
                     menuHTML += `<div class="category-container">`;
@@ -231,20 +332,20 @@
                     menuHTML += `<div id="${categoryId}">`;
                     
                     items.forEach((dish, index) => {
+                        // استخدام style="display: flex" بدلاً من hidden-item لجعل الفلترة أسهل
                         const isHidden = index >= ITEMS_TO_SHOW;
-                        const displayClass = isHidden ? 'hidden-item' : '';
+                        const initialDisplay = isHidden ? 'none' : 'flex';
                         
                         menuHTML += `
-                            <div class="menu-item ${displayClass}">
+                            <div class="menu-item" style="display: ${initialDisplay};">
                                 <span class="item-name">${dish.item}</span>
                                 <span class="item-price">${dish.price} ج.م</span>
                             </div>
                         `;
                     });
                     
-                    menuHTML += `</div>`; // إغلاق div الـ id
+                    menuHTML += `</div>`; 
 
-                    // إضافة زر العرض/الإخفاء إذا كان عدد الأصناف أكبر من الحد المسموح به
                     if (items.length > ITEMS_TO_SHOW) {
                         const hiddenCount = items.length - ITEMS_TO_SHOW;
                         menuHTML += `
@@ -254,18 +355,18 @@
                         `;
                     }
                     
-                    menuHTML += `</div>`; // إغلاق category-container
+                    menuHTML += `</div>`; 
                 }
 
                 if (menuHTML === '') {
-                    container.innerHTML = '<p style="color:blue; text-align:center;">القائمة فارغة أو صيغة الأعمدة غير صحيحة. يرجى التأكد من أن الترتيب في جوجل شيتس هو: **التصنيف** ثم **الصنف** ثم **السعر**.</p>';
+                    container.innerHTML = '<p style="color:blue; text-align:center;">القائمة فارغة أو صيغة الأعمدة غير صحيحة.</p>';
                 } else {
                     container.innerHTML = menuHTML;
                 }
                 
             } catch (error) {
                 console.error('حدث خطأ أثناء جلب أو تحليل البيانات:', error);
-                container.innerHTML = '<p style="color:red; text-align:center;">عفواً! لم يتمكن النظام من تحميل قائمة الأسعار. (تأكد من أن الرابط صحيح وتم نشره بصيغة CSV)</p>';
+                container.innerHTML = '<p style="color:red; text-align:center;">عفواً! لم يتمكن النظام من تحميل قائمة الأسعار.</p>';
             }
         }
 
