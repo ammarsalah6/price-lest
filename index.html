@@ -209,26 +209,28 @@
             </div>
         </div>
     </div>
-    
-    <script>
+        <script>
         const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRgbYRoL8GGwdIFjwzWvtNh43_ylOoYDRCst4i-pJUjPOwT813rVkCCGeoYFKfSPnXcHBAb094Z1SF8/pub?gid=1174703353&single=true&output=csv';
         const ITEMS_TO_SHOW = 5; 
 
         // 💡 الدالة المصححة لـ "عرض المزيد/عرض الأقل"
         function toggleItems(button, categoryId) {
             const container = document.getElementById(categoryId);
-            // البحث عن العناصر التي تحمل كلاس الإخفاء
-            const hiddenItems = container.querySelectorAll('.menu-item.hidden-item');
+            // البحث عن كل الأصناف داخل القسم
             const allItems = container.querySelectorAll('.menu-item');
+            
+            // حساب عدد العناصر المخفية في الحالة الأساسية
             const totalHiddenCount = allItems.length - ITEMS_TO_SHOW;
 
+            // إذا كان النص الحالي هو "عرض المزيد"
             if (button.innerText.includes('عرض المزيد')) {
-                // إظهار العناصر المخفية عن طريق إزالة الكلاس
+                // إظهار جميع العناصر بعد أول 5 (بإزالة الكلاس)
                 allItems.forEach(item => item.classList.remove('hidden-item'));
                 button.innerText = 'عرض الأقل';
             } else {
                 // إخفاء العناصر الزائدة عن طريق إضافة الكلاس
                 allItems.forEach((item, index) => {
+                    // إذا كان مؤشر الصنف أكبر من أو يساوي 5 (الحد الأقصى للعرض)
                     if (index >= ITEMS_TO_SHOW) {
                          item.classList.add('hidden-item');
                     }
@@ -236,12 +238,13 @@
                 button.innerText = `عرض المزيد (${totalHiddenCount} صنف إضافي)`;
             }
             
-            // إفراغ مربع البحث لإعادة القائمة لوضعها الطبيعي بعد التبديل
-            document.getElementById('searchInput').value = ''; 
+            // 💡 ملاحظة: لا نحتاج لتشغيل filterMenu() هنا طالما أننا لا نعدل قيمة البحث.
+            // ولكن سنعيدها لإعادة ضبط شريط البحث
+            document.getElementById('searchInput').value = '';
             filterMenu(); 
         }
 
-        // 💡 الدالة المصححة للبحث/الفلترة
+        // 💡 دالة البحث/الفلترة
         function filterMenu() {
             const input = document.getElementById('searchInput');
             const filter = input.value.toLowerCase(); 
@@ -289,7 +292,7 @@
                     if (toggleBtn) toggleBtn.style.display = 'block'; 
                     
                     items.forEach((item, index) => {
-                        item.style.display = 'flex'; // إظهار الكل أولاً
+                        item.style.display = 'flex'; // إظهار الكل أولاً (إلغاء الإخفاء الناتج عن البحث)
                         
                         // ثم إعادة إضافة كلاس الإخفاء للعناصر الزائدة
                         if (index >= ITEMS_TO_SHOW) {
@@ -300,7 +303,7 @@
                     });
 
                     // إعادة زر "عرض الأقل" لوضعه الأصلي (عرض المزيد)
-                    if (toggleBtn && toggleBtn.innerText === 'عرض الأقل') {
+                    if (toggleBtn && toggleBtn.innerText.includes('عرض الأقل')) {
                          const hiddenCount = items.length - ITEMS_TO_SHOW;
                          toggleBtn.innerText = `عرض المزيد (${hiddenCount} صنف إضافي)`;
                     }
@@ -386,3 +389,4 @@
     </script>
 </body>
 </html>
+
