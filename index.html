@@ -231,14 +231,12 @@
                 allItems.forEach((item, index) => {
                     if (index >= ITEMS_TO_SHOW) {
                          item.classList.add('hidden-item');
-                         item.style.display = 'none';
+                         item.style.display = 'none'; // تأكد من إخفاء الأصناف فعلياً
                     }
                 });
+                // 💡 التعديل هنا: نستخدم totalHiddenCount لتحديث النص بشكل صحيح
                 button.innerText = `عرض المزيد (${totalHiddenCount} صنف إضافي)`;
             }
-            
-            document.getElementById('searchInput').value = ''; 
-            filterMenu(); 
         }
 
         function filterMenu() {
@@ -279,21 +277,28 @@
 
                 if (filter === '') {
                     categoryContainer.style.display = 'block'; 
-                    if (toggleBtn) toggleBtn.style.display = 'block'; 
+                    
+                    if (toggleBtn) {
+                        toggleBtn.style.display = 'block'; 
+                    }
+
+                    const totalItems = items.length;
                     
                     items.forEach((item, index) => {
                         item.style.display = 'flex';
                         
                         if (index >= ITEMS_TO_SHOW) {
                              item.classList.add('hidden-item');
+                             item.style.display = 'none'; // 💡 تأكد من إخفاء الأصناف
                         } else {
                              item.classList.remove('hidden-item');
                         }
                     });
 
-                    if (toggleBtn && toggleBtn.innerText.includes('عرض الأقل')) {
-                         const hiddenCount = items.length - ITEMS_TO_SHOW;
-                         toggleBtn.innerText = `عرض المزيد (${hiddenCount} صنف إضافي)`;
+                    // 💡 التعديل: تحديث نص زر التبديل إلى "عرض المزيد" وحساب عدد الأصناف المخفية
+                    if (toggleBtn && totalItems > ITEMS_TO_SHOW) {
+                        const hiddenCount = totalItems - ITEMS_TO_SHOW;
+                        toggleBtn.innerText = `عرض المزيد (${hiddenCount} صنف إضافي)`;
                     }
                 }
             });
@@ -335,7 +340,8 @@
                     menuHTML += `<div id="${categoryId}">`;
                     
                     items.forEach((dish, index) => {
-                        const hiddenClass = index >= ITEMS_TO_SHOW ? 'hidden-item' : '';
+                        // 💡 يجب تعيين display: none في CSS لـ .hidden-item ليتم إخفاؤه
+                        const hiddenClass = index >= ITEMS_TO_SHOW ? 'hidden-item' : ''; 
                         
                         menuHTML += `
                             <div class="menu-item ${hiddenClass}">
