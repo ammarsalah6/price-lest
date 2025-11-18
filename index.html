@@ -170,6 +170,37 @@
         .hidden-item {
             display: none;
         }
+
+        /* 🟢 تنسيقات الزر العائم الجديد (Follow Us Button) */
+        .float-btn {
+            position: fixed; /* يجعله عائماً */
+            bottom: 20px; /* المسافة من الأسفل */
+            left: 20px; /* المسافة من اليسار */
+            background-color: #126104; /* لون خلفية أخضر غامق */
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            text-decoration: none;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+            z-index: 100; /* للتأكد من ظهوره فوق العناصر الأخرى */
+        }
+        .float-btn:hover {
+            background-color: #0d4603;
+        }
+
+        /* لأجهزة الموبايل (عكس الاتجاه لجعله على اليمين في الوضع العربي) */
+        @media (max-width: 768px) {
+            .float-btn {
+                right: 15px; 
+                left: auto;
+                bottom: 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -198,7 +229,7 @@
             <p style="text-align:center;">جاري تحميل الأسعار...</p>
         </div>
 
-        <div class="category-container" style="text-align:center; margin-top: 50px;">
+        <div class="category-container" id="follow-us-section" style="text-align:center; margin-top: 50px;">
             <h2>تابعنا وتواصل معنا</h2>
             <div style="display: flex; justify-content: center; gap: 20px;">
                 <a href="https://www.facebook.com/share/16RQhUBg3B/" target="_blank" style="font-size: 2em; color: #1877F2;"><i class="fab fa-facebook-square"></i></a>
@@ -209,6 +240,10 @@
             </div>
         </div>
     </div>
+    
+    <a href="#follow-us-section" class="float-btn">
+        <i class="fas fa-arrow-down"></i> تابعنا
+    </a>
     
     <script>
         const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRgbYRoL8GGwdIFjwzWvtNh43_ylOoYDRCst4i-pJUjPOwT813rVkCCGeoYFKfSPnXcHBAb094Z1SF8/pub?gid=1174703353&single=true&output=csv';
@@ -231,10 +266,9 @@
                 allItems.forEach((item, index) => {
                     if (index >= ITEMS_TO_SHOW) {
                          item.classList.add('hidden-item');
-                         item.style.display = 'none'; // تأكد من إخفاء الأصناف فعلياً
+                         item.style.display = 'none';
                     }
                 });
-                // 💡 التعديل هنا: نستخدم totalHiddenCount لتحديث النص بشكل صحيح
                 button.innerText = `عرض المزيد (${totalHiddenCount} صنف إضافي)`;
             }
         }
@@ -289,13 +323,12 @@
                         
                         if (index >= ITEMS_TO_SHOW) {
                              item.classList.add('hidden-item');
-                             item.style.display = 'none'; // 💡 تأكد من إخفاء الأصناف
+                             item.style.display = 'none';
                         } else {
                              item.classList.remove('hidden-item');
                         }
                     });
 
-                    // 💡 التعديل: تحديث نص زر التبديل إلى "عرض المزيد" وحساب عدد الأصناف المخفية
                     if (toggleBtn && totalItems > ITEMS_TO_SHOW) {
                         const hiddenCount = totalItems - ITEMS_TO_SHOW;
                         toggleBtn.innerText = `عرض المزيد (${hiddenCount} صنف إضافي)`;
@@ -332,7 +365,6 @@
                 
                 for (const category in categories) {
                     const items = categories[category];
-                    // 🔹 تعديل الـ ID ليكون آمن
                     const categoryId = 'cat-' + category.replace(/[^a-zA-Z0-9_\u0600-\u06FF]/g, '_'); 
 
                     menuHTML += `<div class="category-container">`;
@@ -340,8 +372,7 @@
                     menuHTML += `<div id="${categoryId}">`;
                     
                     items.forEach((dish, index) => {
-                        // 💡 يجب تعيين display: none في CSS لـ .hidden-item ليتم إخفاؤه
-                        const hiddenClass = index >= ITEMS_TO_SHOW ? 'hidden-item' : ''; 
+                        const hiddenClass = index >= ITEMS_TO_SHOW ? 'hidden-item' : '';
                         
                         menuHTML += `
                             <div class="menu-item ${hiddenClass}">
